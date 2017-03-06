@@ -45,5 +45,8 @@ Quite simply, this guide will set you up with a Linux server that runs OpenVPN, 
   - iOS: [OpenVPN Connect](https://itunes.apple.com/us/app/openvpn-connect/id590379981)
   - Android: [OpenVPN Connect](https://play.google.com/store/apps/details?id=net.openvpn.openvpn)
 
+## Adding/Removing Users
+Thanks to the thoughtful work on Nyr, we can just use their script from the first step to manage users. It will detect that OpenVPN is already installed and prompt you to Add a new User, Removing existing user, or Remove OpenVPN completely: `wget https://git.io/vpn -O openvpn-install.sh && bash openvpn-install.sh`
+
 ## License
 These instructions are licensed under an [MIT License](LICENSE)
