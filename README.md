@@ -14,11 +14,11 @@ Quite simply, this guide will set you up with a Linux server that runs OpenVPN, 
   - `wget https://git.io/vpn -O openvpn-install.sh && bash openvpn-install.sh`
     - Follow the instructions to get it set up, it should take about 1 minute
     - It will generate an `.ovpn` file which you will use to connect to the VPN with from your client. We'll need this later on, so feel free to `scp` it to your client machine.
-1. Now we're going to overwrite our `hosts` file to route malicious domains to `0.0.0.0` by using [StevenBlack](https://github.com/StevenBlack)'s amazing [hosts](https://github.com/StevenBlack/hosts) project.
+2. Now we're going to overwrite our `hosts` file to route malicious domains to `0.0.0.0` by using [StevenBlack](https://github.com/StevenBlack)'s amazing [hosts](https://github.com/StevenBlack/hosts) project.
   - `wget https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts -O /etc/hosts`
-1. Install [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)
+3. Install [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)
   - `sudo apt-get install dnsmasq`
-1. We need to edit the dnsmasq config file to do a few things:
+4. We need to edit the dnsmasq config file to do a few things:
   - `sudo vim /etc/dnsmasq.conf`
     - Enable `domain-needed` and `bogus-priv`
     - Add in some alternative DNS servers (if you don't like the one provided by your host). For this example, we'll add Google DNS
@@ -31,16 +31,16 @@ Quite simply, this guide will set you up with a Linux server that runs OpenVPN, 
     listen-address=127.0.0.1
     listen-address=10.8.0.1
     ```
-1. Edit the OpenVPN config file to resolve dhcp through dnsmasq
+5. Edit the OpenVPN config file to resolve dhcp through dnsmasq
   - `vim /etc/openvpn/server.conf`
     - Add `push "dhcp-option DNS 10.8.0.1"`
     - Delete any other lines about `"dhcp-option"`
-1. Create a crontab entry that updates your hosts file every night at midnight:
+6. Create a crontab entry that updates your hosts file every night at midnight:
   - `crontab -e`
     - Add the following line `0 0 * * * wget https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts -O /etc/hosts && service openvpn restart`
-1. Restart the services
+7. Restart the services
   - `sudo service dnsmasq restart && sudo service openvpn restart`
-1. At this point, we have an OpenVPN server routing traffic through Dnsmasq, which is checking our hosts file for malicious hosts, and falling back to a DNS provider for non-malicious hosts. Using the `.ovpn` file from earlier, you can now connect to the VPN from your client.
+8. At this point, we have an OpenVPN server routing traffic through Dnsmasq, which is checking our hosts file for malicious hosts, and falling back to a DNS provider for non-malicious hosts. Using the `.ovpn` file from earlier, you can now connect to the VPN from your client.
   - Mac: [Tunnelblick](https://tunnelblick.net/)
   - iOS: [OpenVPN Connect](https://itunes.apple.com/us/app/openvpn-connect/id590379981)
   - Android: [OpenVPN Connect](https://play.google.com/store/apps/details?id=net.openvpn.openvpn)
